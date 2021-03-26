@@ -41,7 +41,6 @@ const controller = {
     async getGame(message, search) {
         // Message to confirm the method has been called
         message.channel.send("Estoy buscando el juego. Esto puede tardar un rato, tengo que buscar entre casi 20.000 juegos...");
-        console.log(search);
         /* 
             CrackWatch API gives games in pages with 30 games each.
         
