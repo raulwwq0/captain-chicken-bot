@@ -6,8 +6,9 @@ console.log("Bot ready");
 // Load modules, confings and controllers
 const Discord = require("discord.js");
 const { token, prefix } = require("./config");
-const CrackWatchController = require("./controllers/crackwatch");
+const HelpController = require("./controllers/help");
 const MusicController = require("./controllers/music");
+const CrackWatchController = require("./controllers/crackwatch");
 
 // Create the client and add the prefix to call the bot
 const client = new Discord.Client();
@@ -24,6 +25,11 @@ client.on("message", async (message) => {
 
   // COMMANDS ################################################################################
 
+  // Help ----------------------------------------------------------------------------------
+  if (command === "help") {
+    HelpController.sendHelp(message);
+  }
+
   // Lantency --------------------------------------------------------------------------------
   if (command === "ping") {
     const timeTaken = Date.now() - message.createdTimestamp;
@@ -34,7 +40,7 @@ client.on("message", async (message) => {
 
   // Call the queue of the server to store the YouTube link of the songs
   const serverQueue = MusicController.serverQueue(message);
-  
+
   // This command connect the bot to the voice channel and start playing the song from the URL
   if (command === "play") {
     MusicController.prepareBot(message, serverQueue, args);
@@ -65,7 +71,7 @@ client.on("message", async (message) => {
     CrackWatchController.getGame(message, search).then((answer) =>
       message.channel.send(answer)
     );
-  }  
+  }
 });
 
 client.login(token);
