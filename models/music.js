@@ -5,7 +5,7 @@ const queueContruct = {
   voiceChannel: String,
   connection: null,
   songs: [],
-  volume: 5,
+  volume: 10,
   playing: true,
 };
 
