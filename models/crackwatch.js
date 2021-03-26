@@ -7,7 +7,9 @@ const embedMessage = {
     thumbnail: {
         url: String,
     },
-    description: String
+    description: String,
+    gameFound: false,
+    counter: 0,
 }
 
 module.exports = embedMessage;

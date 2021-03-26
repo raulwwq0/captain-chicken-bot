@@ -32,7 +32,7 @@ client.on("message", function (message) {
     }
 
     // Search a game in CrackWatch
-    if (command === "crackwatch"){
+    if (command === "cw"){
         // If there are no args when crackwatch command is called, send a message
         if (!args.length) return message.reply('como se nota que tu numero de cromosomas no es el adecuado: Tienes que indicar el juego que quieres buscar después de " }crackwatch "');
 

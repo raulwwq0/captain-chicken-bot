@@ -41,6 +41,7 @@ const controller = {
     async getGame(message, search) {
         // Message to confirm the method has been called
         message.channel.send("Estoy buscando el juego. Esto puede tardar un rato, tengo que buscar entre casi 20.000 juegos...");
+        console.log(embed);
         /* 
             CrackWatch API gives games in pages with 30 games each.
         
@@ -63,7 +64,7 @@ const controller = {
             for (var element in response) {
 
                 // Search games by slug is easier due to the words are splitting by -
-                if (response[element].slug === search) {
+                if (response[element].slug === search || response[element].slug.includes(search)) {
 
                     // If the game has a crack date means that was cracked
                     if (response[element].crackDate) {
@@ -75,6 +76,8 @@ const controller = {
                         embed.url = response[element].url;
                         embed.thumbnail.url = response[element].imagePoster;
                         embed.description = '¡¡¡Está pirata!!!';
+                        embed.gameFound = true;
+                        embed.counter++;
                     }
 
                     // If the game hasn't a crack date means that wasn't cracked or it was unreleased
@@ -87,10 +90,12 @@ const controller = {
                         embed.url = response[element].url;
                         embed.thumbnail.url = response[element].imagePoster;
                         embed.description = 'No está pirata...';
+                        embed.gameFound = true;
+                        embed.counter++;
                     }
 
                     // Send the model data as a message to the channel
-                    return message.channel.send({ embed: embed });
+                    message.channel.send({ embed: embed });
                 }
             }
         } while (response.length === 30);
@@ -100,7 +105,7 @@ const controller = {
             it send a message with the possible options why the game
             wasn't found
         */
-        if (response[element].slug !== search) {
+        if (!embed.gameFound) {
             console.log(`404: ${search} not found`);
 
             // Here we fill the model data    
@@ -115,10 +120,12 @@ const controller = {
                 2. El juego no está en Crackwatch
                 3. Eres pendejo y no sabes escribir el nombre del juego
             `;
+
+            // Send the model data as a message to the channel
+            return message.channel.send({ embed: embed });
         }
 
-        // Send the model data as a message to the channel
-        return message.channel.send({ embed: embed });
+        return message.reply(`he encontrado ${embed.counter} juegos que incluyen ${search} en sus títulos`);
     }
 }
 
