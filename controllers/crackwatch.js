@@ -94,9 +94,7 @@ const controller = {
                     return message.channel.send({ embed: embed });
                 }
             }
-
-            console.log(cancelRequest);
-        } while (response.length === 30 || cancelRequest === false);
+        } while (response.length === 30);
 
         /*
             In case of we couldn't find the game in the previous loop',
