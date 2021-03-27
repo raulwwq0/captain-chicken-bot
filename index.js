@@ -13,6 +13,10 @@ const CrackWatchController = require("./controllers/crackwatch");
 // Create the client and add the prefix to call the bot
 const client = new Discord.Client();
 
+// Create the music player
+
+var player = MusicController.createPlayer(client);
+
 // Catch message and handle a response
 client.on("message", async (message) => {
   // Avoid messages from the own bot and check prefix
@@ -38,22 +42,34 @@ client.on("message", async (message) => {
 
   // Music -----------------------------------------------------------------------------------
 
-  // Call the queue of the server to store the YouTube link of the songs
-  const serverQueue = MusicController.serverQueue(message);
-
   // This command connect the bot to the voice channel and start playing the song from the URL
   if (command === "play") {
-    MusicController.prepareBot(message, serverQueue, args);
+    MusicController.playMusic(player, message, args);
+  }
+
+  // Allow to play a playlist
+  if (command === "playlist") {
+    MusicController.playList(player, message, args);
   }
 
   // This command skip to the following song in the queue
   if (command === "skip") {
-    MusicController.skip(message, serverQueue);
+    MusicController.skipSong(player, message);
   }
 
   // This command stop playing song and disconnect the bot from the voice channel
   if (command === "stop") {
-    MusicController.stop(message, serverQueue);
+    MusicController.stopMusic(player, message);
+  }
+
+  // Send a message with the name of the current song
+  if (command === "song") {
+    MusicController.currentSongName(player, message);
+  }
+
+  // Show a progress bar and how many time left to end the song
+  if (command === "progress") {
+    MusicController.progressBar(player, message);
   }
 
   // Search a game in CrackWatch ----------------------------------------------------------------

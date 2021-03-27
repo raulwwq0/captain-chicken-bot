@@ -1,150 +1,98 @@
 "use strict";
 
-// Import modules and models
-const ytdl = require("ytdl-core");
-const queueContruct = require("../models/music");
-const song = require("../models/music");
-
-// Create a queue
-const queue = new Map();
+const { Player } = require("discord-music-player");
 
 const controller = {
-  // Set the queue of the server
-  serverQueue(message) {
-    return queue.get(message.guild.id);
+
+  // This method create then new player with his options
+  createPlayer(client) {
+    const player = new Player(client, {
+      leaveOnEnd: true, // Leave the voice channel when there is no more songs
+      leaveOnStop: true, // Leave the voice channel when music stops
+      leaveOnEmpty: true, // Leave the voice channel when the queue is empty
+      timeout: 0, // Set how many time take the bot to leave the voice channel
+      volume: 100, // Set the volume
+      quality: "high", // Sound quality
+    });
+
+    // Player send messages on these events
+    player
+      .on("songAdd", (message, queue, song) =>
+        message.channel.send(`Se añadió **${song.name}** a la lista`)
+      )
+      .on("songFirst", (message, song) =>
+        message.channel.send(`Está sonando: **${song.name}**`)
+      )
+      .on("playlistAdd", (message, queue, playlist) =>
+        message.channel.send(
+          `Se añadió a la lista la playlist **${playlist.name}**, que tiene **${playlist.videoCount}** canciones`
+        )
+      );
+
+    return player;
   },
 
-  // This method prepare the bot to play music
-  async prepareBot(message, serverQueue, args) {
-    // Tell the bot to what voice channel he need to go
-    const voiceChannel = message.member.voice.channel;
-    if (!voiceChannel)
-      return message.channel.send(
-        "Vete a un canal de voz para escuchar música..."
-      );
+  // This method allow the bot to play a song or store it in the queue
+  async playMusic(player, message, args) {
 
-    // Look for necessary permissions he need to play music and join a voice channel
-    const permissions = voiceChannel.permissionsFor(message.client.user);
-    if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-      return message.channel.send(
-        "Necesito permisos para hablar y unirme a un canal de voz"
-      );
-    }
+    // If there is another song, the next one will be added to the queue
+    if (player.isPlaying(message)) {
+      let song = await player.addToQueue(message, args.join(" "));
 
-    // Get information of the song through the URL
-    const songInfo = await ytdl.getInfo(args);
-    song.title = songInfo.videoDetails.title;
-    song.url = songInfo.videoDetails.video_url;
-
-    /* 
-        Look if there is other song in the queue: 
-         - No other song: create a new queue
-         - Other song: add the new song after the existing one in the queue
-    */
-
-    if (!serverQueue) {
-      // Fill the new queue model with data from the server
-      queueContruct.textChannel = message.channel;
-      queueContruct.voiceChannel = voiceChannel;
-
-      // Set the queue as active
-      queue.set(message.guild.id, queueContruct);
-
-      // Add new info to songs queue
-      queueContruct.songs.push(song);
-
-      // Try to play the queue, catch possible errors
-      try {
-        // Conect to the voice channel
-        var connection = await voiceChannel.join();
-        queueContruct.connection = connection;
-
-        // Call the method to play the queue
-        this.play(message.guild, queueContruct.songs[0]);
-      } catch (err) {
-        // Show error in console
-        console.log(err);
-        // Delete the queue
-        queue.delete(message.guild.id);
-        // Send error message
-        return message.channel.send(err);
-      }
-    } else {
-      // Add the new song to the existing queue
-      serverQueue.songs.push(song);
-      // Send a message to confirm
-      return message.channel.send(
-        `${song.title} se añadió a la lista de reproducción`
-      );
-    }
-  },
-
-  // This method play the songs in the queue
-  play(guild, song) {
-      // Get the queue
-    const serverQueue = queue.get(guild.id);
-    // Delete the existing queue if there are no songs
-    if (!song) {
-      serverQueue.voiceChannel.leave();
-      queue.delete(guild.id);
+      // If there were no errors the songAdd event will fire and the song will not be null.
+      if (song) console.log(`Se añadió **${song.name}** a la lista`);
       return;
-    }
 
-    // Dispatcher plays the song from the URL
-    const dispatcher = serverQueue.connection
-        // Plays the song from the URL
-      .play(ytdl(song.url))
-      // When song is over, skip to the next song
-      .on("finish", () => {
-        serverQueue.songs.shift();
-        this.play(guild, serverQueue.songs[0]);
-      })
-      // Catch a possible error an it in the console
-      .on("error", (error) => console.error(error));
-    // Set volume
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    // Send a message to confirm what it the song is playing now
-    serverQueue.textChannel.send(`Está sonando: **${song.title}**`);
+    // Else the song will be played at the moment
+    } else {
+      let song = await player.play(message, args.join(" "));
+
+      // If there were no errors the songAdd event will fire and the song will not be null.
+      if (song) console.log(`Empieza a sonar **${song.name}**`);
+      return;
+    };
   },
 
-/*
-The skip and stop method are quite similar:
-
-Both show messages when the user is not in a voice channel or
-the are no songs in the queue. Then both methods skip the actual 
-song.
-
-The only difference is that the stop method clear the queue before
-skipping the song. Due to there are no song in the queue, it stops.
-*/
-
-  skip(message, serverQueue) {
-    if (!message.member.voice.channel)
-      return message.channel.send(
-        "Tienes que estar en el canal de voz para saltar la canción"
-      );
-    if (!serverQueue)
-      return message.channel.send(
-        "No puedo saltar la canción si no hay canciones para saltar..."
-      );
-    serverQueue.connection.dispatcher.end();
+  // Same as the previous method, but with playlist
+  async playList(player, message, args) {
+    await player.playlist(message, {
+      search: args.join(" "),
+      maxSongs: -1, // These line is the max number of songs a playlist can have (-1 = infinite)
+    });
   },
 
-  stop(message, serverQueue) {
-    if (!message.member.voice.channel)
-      return message.channel.send(
-        "Tienes que estar en el canal de voz para detener la canción"
-      );
+  // This method allows the user to skip the current song
+  skipSong(player, message) {
+    let song = player.skip(message);
+    if (song) {
+      message.channel.send(`Dejamos **${song.name}** y pasamos a la siguiente`); // Message with the song that was skipped
+      setTimeout(() => this.currentSongName(player, message), 1000); // Message with the following song
+    };    
+  },
 
-    if (!serverQueue)
-      return message.channel.send(
-        "No puedo detener la canción si no hay canciones para detener..."
-      );
+  // This method allows the user to stop the bot playing music and disconnect him from the channel
+  stopMusic(player, message) {
+    let finished = player.stop(message);
+    if (finished) message.channel.send("Música detenida");
+  },
 
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
+  // This method say the name of the current song
+  async currentSongName(player, message) {
+    let song = await player.nowPlaying(message);
+    if(song)
+        message.channel.send(`Está sonando: **${song.name}**`);
+  },
+
+  // This method send a message with a little progression bar and how many time left to end the song
+  progressBar(player, message) {
+    let progressBar = player.createProgressBar(message, {
+      size: 30,
+      block: "-",
+      arrow: "|",
+    });
+    if (progressBar) message.channel.send(progressBar);
   },
 };
 
-// Export controller to use it in index.js
+// Export the controller
 module.exports = controller;
