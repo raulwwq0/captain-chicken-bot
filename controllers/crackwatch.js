@@ -126,6 +126,7 @@ const controller = {
         }
 
         return message.reply(`he encontrado ${embed.counter} juegos que incluyen ${search} en sus títulos`);
+        embed.counter = 0;
     }
 }
 
