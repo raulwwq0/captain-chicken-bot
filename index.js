@@ -8,6 +8,7 @@ const Discord = require("discord.js");
 const { token, prefix } = require("./config");
 const HelpController = require("./controllers/help");
 const MusicController = require("./controllers/music");
+const TTSController = require("./controllers/tts");
 const CrackWatchController = require("./controllers/crackwatch");
 
 // Create the client and add the prefix to call the bot
@@ -78,6 +79,11 @@ client.on("message", async (message) => {
   // Show a progress bar and how many time left to end the song
   if (command === "progress") {
     MusicController.progressBar(player, message);
+  }
+
+  // Text to Speech ----------------------------------------------------------------------------------------------------------------------------
+  if (command === "tts") {
+    TTSController.TTS(client, message, args);
   }
 
   // Search a game in CrackWatch ----------------------------------------------------------------
