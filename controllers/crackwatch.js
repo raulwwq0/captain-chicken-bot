@@ -42,6 +42,7 @@ const controller = {
         // Message to confirm the method has been called
         message.channel.send("Estoy buscando el juego. Esto puede tardar un rato, tengo que buscar entre casi 20.000 juegos...");
         embed.counter = 0;
+        embed.gameFound = false;
         console.log(embed);
         /* 
             CrackWatch API gives games in pages with 30 games each.
