@@ -124,7 +124,7 @@ const controller = {
             `;
 
             // Send the model data as a message to the channel
-            return message.channel.send({ embed: embed });
+            return message.reply({ embed: embed });
         }
 
         return message.reply(`he encontrado ${embed.counter} juegos que incluyen ${search} en sus títulos`);
