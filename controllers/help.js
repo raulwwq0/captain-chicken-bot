@@ -44,8 +44,10 @@ const controller = {
     help.fields[9].name = "` }progress `";
     help.fields[9].value =
       "Muestra una pequeña barra de progreso y el tiempo que lleva sonando la canción";
-    help.fields[10].name = '` }cw + "nombre de un juego" `';
-    help.fields[10].value = `Busca en __CrackWatch__ el estado de un juego. Puede tardar hasta **2 minutos** en realizar una busqueda ya que solo puede acceder a 30 juegos a la vez (va de 30 en 30 y hay casi 20.000 juegos registrados)
+    help.fields[10].name = "` }tts `";
+    help.fields[10].value = "Captain Chicken dirá lo que escribas después de este comando";
+    help.fields[11].name = '` }cw + "nombre de un juego" `';
+    help.fields[11].value = `Busca en __CrackWatch__ el estado de un juego. Puede tardar hasta **2 minutos** en realizar una busqueda ya que solo puede acceder a 30 juegos a la vez (va de 30 en 30 y hay casi 20.000 juegos registrados)
         
         Para evitar posibles errores hay que poner el **nombre del juego lo más exacto posible** (sobre todo este signo \`'\`)
 
