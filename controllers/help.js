@@ -12,7 +12,7 @@ const controller = {
 
         Para llamar a Capitán Chicken necesitas usar la __Chicken Señal__ (también conocido como prefijo), que es \` } \`
     
-        Esta es la lista de todos los comandos:
+        **Esta es la lista de todos los comandos:**
         `;
     help.fields[0].name = "` }help `";
     help.fields[0].value = "Muestra todos los comandos disponibles";
@@ -28,18 +28,24 @@ const controller = {
     help.fields[3].name = "` }playlist `";
     help.fields[3].value =
       "Igual que ` }play ` pero con una lista de canciones";
-    help.fields[4].name = "` }skip `";
+      help.fields[4].name = "` }pause `";
     help.fields[4].value =
+      "Pausa la canción actual para continuarla más tarde";
+      help.fields[5].name = "` }continue `";
+    help.fields[5].value =
+      "Continua la canción por donde se pausó";
+    help.fields[6].name = "` }skip `";
+    help.fields[6].value =
       "Salta la canción actual y reproduce la siguiente (si es que hay...)";
-    help.fields[5].name = "` }stop `";
-    help.fields[5].value = "Para la música y se desconecta del canal de voz";
-    help.fields[6].name = "` }song `";
-    help.fields[6].value = "Muestra el nombre de la canción que está sonando";
-    help.fields[7].name = "` }progress `";
-    help.fields[7].value =
+    help.fields[7].name = "` }stop `";
+    help.fields[7].value = "Para la música y se desconecta del canal de voz";
+    help.fields[8].name = "` }song `";
+    help.fields[8].value = "Muestra el nombre de la canción que está sonando";
+    help.fields[9].name = "` }progress `";
+    help.fields[9].value =
       "Muestra una pequeña barra de progreso y el tiempo que lleva sonando la canción";
-    help.fields[8].name = '` }cw + "nombre de un juego" `';
-    help.fields[8].value = `Busca en __CrackWatch__ el estado de un juego. Puede tardar hasta **2 minutos** en realizar una busqueda ya que solo puede acceder a 30 juegos a la vez (va de 30 en 30 y hay casi 20.000 juegos registrados)
+    help.fields[10].name = '` }cw + "nombre de un juego" `';
+    help.fields[10].value = `Busca en __CrackWatch__ el estado de un juego. Puede tardar hasta **2 minutos** en realizar una busqueda ya que solo puede acceder a 30 juegos a la vez (va de 30 en 30 y hay casi 20.000 juegos registrados)
         
         Para evitar posibles errores hay que poner el **nombre del juego lo más exacto posible** (sobre todo este signo \`'\`)
 

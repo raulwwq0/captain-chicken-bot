@@ -52,6 +52,14 @@ client.on("message", async (message) => {
     MusicController.playList(player, message, args);
   }
 
+  if (command === "pause") {
+    MusicController.pauseSong(player, message);
+  }
+
+  if (command === "continue") {
+    MusicController.resumeSong(player, message);
+  }
+
   // This command skip to the following song in the queue
   if (command === "skip") {
     MusicController.skipSong(player, message);

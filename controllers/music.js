@@ -61,6 +61,20 @@ const controller = {
     });
   },
 
+  // Allow the user to pause a song to continue later
+  pauseSong(player, message) {
+    let song = player.pause(message);
+    if(song) 
+        message.channel.send(`**${song.name}** en pausa`);
+  },
+
+  // Exit the pause state an resume the song
+  resumeSong(player, message) {
+    let song = player.resume(message);
+    if(song)
+        message.channel.send(`**${song.name}** vuelve a sonar`);
+  },
+
   // This method allows the user to skip the current song
   skipSong(player, message) {
     let song = player.skip(message);
