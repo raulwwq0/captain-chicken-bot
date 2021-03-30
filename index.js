@@ -85,6 +85,8 @@ client.on("message", async (message) => {
   if (command === "tts") {
     TTSController.TTS(client, message, args);
   }
+  /* 
+  Crackwatch will be closed for a  few months, so their API doesn't work till then
 
   // Search a game in CrackWatch ----------------------------------------------------------------
   if (command === "cw") {
@@ -101,7 +103,9 @@ client.on("message", async (message) => {
     CrackWatchController.getGame(message, search).then((answer) =>
       message.channel.send(answer)
     );
+    
   }
+  */
 });
 
 client.login(token);
