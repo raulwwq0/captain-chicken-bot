@@ -10,6 +10,7 @@ const HelpController = require("./controllers/help");
 const MusicController = require("./controllers/music");
 const TTSController = require("./controllers/tts");
 const CrackWatchController = require("./controllers/crackwatch");
+const DestinyController = require("./controllers/destiny");
 
 // Create the client and add the prefix to call the bot
 const client = new Discord.Client();
@@ -85,6 +86,12 @@ client.on("message", async (message) => {
   if (command === "tts") {
     TTSController.TTS(client, message, args);
   }
+
+  // Destiny ----------------------------------------------------------------------------------------------------------------
+  if (command === "destiny") {
+    DestinyController.getInfo(message, args);
+  }
+
   /* 
   Crackwatch will be closed for a  few months, so their API doesn't work till then
 
