@@ -18,39 +18,7 @@ const helpEmbed = {
     {
       name: String,
       value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
-    {
-      name: String,
-      value: String,
-    },
+    }
   ],
 };
 

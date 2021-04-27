@@ -14,44 +14,32 @@ const controller = {
     
         **Esta es la lista de todos los comandos:**
         `;
-    help.fields[0].name = "` }help `";
-    help.fields[0].value = "Muestra todos los comandos disponibles";
-    help.fields[1].name = "` }ping `";
-    help.fields[1].value =
-      "Muestra la latencia que tiene el bot respecto al servidor";
-    help.fields[2].name = '` }play + "URL o nombre de la canción" `';
-    help.fields[2].value = `
-        El bot entra en el canal de voz donde se encuentra el usuario que ejecuta el comando y reproduce la canción
-      
-        Soporta enlaces de YouTube, Spotify e incluso busqueda por nombre de la canción
-      `;
-    help.fields[3].name = "` }playlist `";
-    help.fields[3].value =
-      "Igual que ` }play ` pero con una lista de canciones";
-      help.fields[4].name = "` }pause `";
-    help.fields[4].value =
-      "Pausa la canción actual para continuarla más tarde";
-      help.fields[5].name = "` }continue `";
-    help.fields[5].value =
-      "Continua la canción por donde se pausó";
-    help.fields[6].name = "` }skip `";
-    help.fields[6].value =
-      "Salta la canción actual y reproduce la siguiente (si es que hay...)";
-    help.fields[7].name = "` }stop `";
-    help.fields[7].value = "Para la música y se desconecta del canal de voz";
-    help.fields[8].name = "` }song `";
-    help.fields[8].value = "Muestra el nombre de la canción que está sonando";
-    help.fields[9].name = "` }progress `";
-    help.fields[9].value =
-      "Muestra una pequeña barra de progreso y el tiempo que lleva sonando la canción";
-    help.fields[10].name = "` }tts `";
-    help.fields[10].value = "Captain Chicken dirá lo que escribas después de este comando";
-    help.fields[11].name = '` }cw + "nombre de un juego" ` ***¡OJO! Este comando no funciona porque CrackWatch ha cerrado temporalmente***';
-    help.fields[11].value = `Busca en __CrackWatch__ el estado de un juego. Puede tardar hasta **2 minutos** en realizar una busqueda ya que solo puede acceder a 30 juegos a la vez (va de 30 en 30 y hay casi 20.000 juegos registrados)
-        
-        Para evitar posibles errores hay que poner el **nombre del juego lo más exacto posible** (sobre todo este signo \`'\`)
 
-        ***¡ADVERTENCIA!***  Puede enviar muchos mensajes seguidos...`;
+    help.fields[0].name = "Música";
+    help.fields[0].value =`
+    \` }play + "URL o nombre de la canción" \` El bot entra en el canal de voz donde se encuentra el usuario que ejecuta el comando y reproduce la canción. Soporta enlaces de YouTube, Spotify e incluso busqueda por nombre de la canción
+    \` }playlist + "URL o nombre de la playlist" \` Igual que }play pero con una lista de canciones
+    \` }pause \` Pausa la canción actual para continuarla más tarde
+    \` }continue \` Continua la canción por donde se pausó
+    \` }skip \` Salta la canción actual y reproduce la siguiente (si es que hay...)
+    \` }stop \` Para la música y se desconecta del canal de voz
+    \` }song \` Muestra el nombre de la canción que está sonando
+    \` }progress \` Muestra una pequeña barra de progreso y el tiempo que lleva sonando la canción
+    `;
+    help.fields[1].name = "Text To Speech";
+    help.fields[1].value = `
+    \` }tts \` Captain Chicken dirá lo que escribas después de este comando
+    `;
+    help.fields[2].name = "Destiny 2";
+    help.fields[2].value = `
+    \` }destiny + "Nombre del item (arma o armadura)" \` Captain Chicken mostrará todo lo relacionado con el arma y armadura que quieres buscar. Por defecto busca en español, si quieres usar la búsqueda de items en inglés debes poner -en detras del comando (ej: }destiny-en para inglés, }destiny o }destiny-es para español)
+    `;
+    help.fields[3].name = "Otros";
+    help.fields[3].value = `
+    \` }help \` Muestra todos los comandos disponibles
+    \` }ping \` Muestra la latencia que tiene el bot respecto al servidor
+    `;
+    
 
     return message.channel.send({ embed: help });
   },
