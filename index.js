@@ -88,8 +88,14 @@ client.on("message", async (message) => {
   }
 
   // Destiny ----------------------------------------------------------------------------------------------------------------
-  if (command === "destiny") {
-    DestinyController.getInfo(message, args);
+  if (command === "destiny" || command === "destiny-es") {
+    var lang = "es";
+    DestinyController.getInfo(message, args, lang);
+  }
+
+  if (command === "destiny-en") {
+    var lang = "en";
+    DestinyController.getInfo(message, args, lang);
   }
 
   /* 

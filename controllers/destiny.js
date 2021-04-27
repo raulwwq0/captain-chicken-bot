@@ -7,13 +7,14 @@ const embed = require("../models/destiny");
 
 // Set the controller
 const controller = {
-  async getInfo(message, args) {
+  async getInfo(message, args, lang) {
     var search = args.join(" ");
+    var got_it = false;
     console.log(`Searching: ${search}`)
 
     // Petitions to the bungie api
     var items_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyInventoryItemDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyInventoryItemDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -22,7 +23,7 @@ const controller = {
     );
 
     var stats_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyStatDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyStatDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -31,7 +32,7 @@ const controller = {
     );
 
     var plugs_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyPlugSetDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyPlugSetDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -59,7 +60,7 @@ const controller = {
           // Filters to avoid unuseful messages
 
           // Filter for 404 entrance in light.gg
-          var filter_404 = await fetch(`https://www.light.gg/db/es/items/${item_searched.hash}`)
+          var filter_404 = await fetch(`https://www.light.gg/db/${lang}/items/${item_searched.hash}`)
           if(filter_404.status !== 200) {
             console.log("Error 404 filter triggered");
             continue
@@ -79,6 +80,7 @@ const controller = {
           // End filters section
 
           console.log("GOT IT!!! Processing messages...");
+          got_it = true;
 
           // Item stats
           var stats_list = [];
@@ -88,47 +90,75 @@ const controller = {
 
           // First message, with most of the info (except random perks)
           embed.title = item_searched.displayProperties.name;
-          embed.url = `https://www.light.gg/db/es/items/${item_searched.hash}`;
+          embed.url = `https://www.light.gg/db/${lang}/items/${item_searched.hash}`;
           embed.thumbnail.url = `${bungie_api}${item_searched.displayProperties.icon}`;
           embed.image.url = `${bungie_api}${item_searched.screenshot}`;
           embed.footer.text = `HASH: ${item_searched.hash}`;
 
           if(item_searched.traitIds.includes("item_type.weapon")){
-            embed.description = `*${item_searched.flavorText}*
+            if(lang === 'es'){
+              embed.description = `*${item_searched.flavorText}*
           
-            **Categoría:** ${item_searched.inventory.tierTypeName}
+              **Categoría:** ${item_searched.inventory.tierTypeName}
+  
+              __**Estadísticas:**__
+              ${stats_list.join(' ')}
+  
+              __**Imagen del Item:**__`;
+            }
 
-            __**Estadísticas:**__
-            ${stats_list.join(' ')}
-
-            __**Imagen del Item:**__`;
+            if(lang === 'en'){
+              embed.description = `*${item_searched.flavorText}*
+          
+              **Category:** ${item_searched.inventory.tierTypeName}
+  
+              __**Stats:**__
+              ${stats_list.join(' ')}
+  
+              __**Item Screenshot:**__`;
+            }
           }
 
           if(item_searched.traitIds.includes("item_type.armor")){
-            embed.description = `*${item_searched.flavorText}*
+            if(lang === 'es'){
+              embed.description = `*${item_searched.flavorText}*
           
-            **Categoría:** ${item_searched.inventory.tierTypeName}`;
+              **Categoría:** ${item_searched.inventory.tierTypeName}`;
+            }
+
+            if(lang === 'en'){
+              embed.description = `*${item_searched.flavorText}*
+          
+              **Category:** ${item_searched.inventory.tierTypeName}`;
+            }
+
             embed.fields = [];
           }
 
-          if(item_searched.inventory.tierTypeName === 'Excepcional'){
-            embed.color = "#ceae33";
-          }
-
-          if(item_searched.inventory.tierTypeName === 'Leyenda'){
-            embed.color = "#522f65";
-          }
-
-          if(item_searched.inventory.tierTypeName === 'Peculiar'){
-            embed.color = "#5076a3";
-          }
-
-          if(item_searched.inventory.tierTypeName === 'Poco común'){
-            embed.color = "#366f42";
-          }
-
-          if(item_searched.inventory.tierTypeName === 'Común'){
-            embed.color = "#c3bcb4";
+          switch (item_searched.inventory.tierTypeName) {
+            case 'Excepcional':
+            case 'Exotic':
+              embed.color = "#ceae33";
+              break;
+            case 'Leyenda':
+            case 'Legendary':
+              embed.color = "#522f65";
+              break;
+            case 'Peculiar':
+            case 'Rare':
+              embed.color = "#5076a3";
+              break;
+            case 'Poco común':
+            case 'Common':
+              embed.color = "#366f42";
+              break;
+            case 'Común':
+            case 'Basic':
+              embed.color = "#c3bcb4";
+              break;
+            default:
+              embed.color = "#000000";
+              break;
           }
 
           message.channel.send({ embed: embed });
@@ -151,7 +181,8 @@ const controller = {
               // Next messages, one per group of perks
               if(random_perks_list.length !== 0) {
                 embed.author = null;
-                embed.title = `Perks aleatorias para el Hueco n°${cnt}`;
+                if(lang === 'es') embed.title = `Perks aleatorias para el Hueco n°${cnt}`;
+                if(lang === 'en') embed.title = `Random perks for Socket n°${cnt}`;
                 embed.url = null;
                 embed.thumbnail.url = null;
                 embed.image.url = null;
@@ -173,10 +204,12 @@ const controller = {
             //Last message for curated roll
             if(curated_roll_list.length !== 0) {
               embed.author = null;
-              if(item_searched.inventory.tierTypeName === 'Excepcional'){
-                embed.title = `Perks Fijas:`;
+              if(item_searched.inventory.tierTypeName === 'Excepcional' || item_searched.inventory.tierTypeName === 'Exotic'){
+                if(lang === 'es') embed.title = `Perks Fijas:`;
+                if(lang === 'en') embed.title = `Signature Perks:`
               } else {
-                embed.title = `Drop Especial de Bungie (Fijo):`;
+                if(lang === 'es') embed.title = `Drop Especial de Bungie (Siempre igual):`;
+                if(lang === 'en') embed.title = `Bungie's Curated Roll (Always the same):`
               }
               embed.url = null;
               embed.thumbnail.url = null;
@@ -189,6 +222,12 @@ const controller = {
           } // End of getting random perks          
         }
       }
+    }
+    if(!got_it){
+      var not_found = '';
+      if(lang === 'es') not_found = `no he encontrado nada relacionado con **${search}**. Escribe el nombre lo más exacto posible.`;
+      if(lang === 'en') not_found = `I couldn't find anything related to **${search}**. Write the name as accurate as possible.`;
+      message.reply(not_found);
     }
     // End
     console.log("Finish!");
