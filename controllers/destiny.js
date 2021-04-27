@@ -165,7 +165,7 @@ const controller = {
           // End of the first message
 
           // Getting random perks of the item if it is possible
-          if(item_searched.traitIds.includes("item_type.weapon")){
+          if(item_searched.traitIds.includes("item_type.weapon") || (item_searched.traitIds.includes("item_type.armor") && item_searched.inventory.tierTypeName === 'Excepcional' || item_searched.inventory.tierTypeName === 'Exotic')){
             var socket_entries = item_searched.sockets.socketEntries;
 
             var curated_roll_list = [];
@@ -176,7 +176,7 @@ const controller = {
               
               var plug_perk_hash = plugs[socket_entries[socket].randomizedPlugSetHash];
   
-              this.getRandomPerks(items, plug_perk_hash, random_perks_list);
+              if(item_searched.traitIds.includes("item_type.weapon")) this.getRandomPerks(items, plug_perk_hash, random_perks_list);
               
               // Next messages, one per group of perks
               if(random_perks_list.length !== 0) {
@@ -199,14 +199,26 @@ const controller = {
             }
 
             // Deleting last 3 entries, which are not perks
-            for(let i = 0; i < 3; i++) curated_roll_list.pop();
+
+            if(item_searched.traitIds.includes("item_type.weapon")) for(let i = 0; i < 3; i++) curated_roll_list.pop();
+            if(item_searched.traitIds.includes("item_type.armor")) {
+              var special_armor_perk = curated_roll_list.pop();
+              curated_roll_list = [special_armor_perk];
+            };
 
             //Last message for curated roll
             if(curated_roll_list.length !== 0) {
               embed.author = null;
               if(item_searched.inventory.tierTypeName === 'Excepcional' || item_searched.inventory.tierTypeName === 'Exotic'){
-                if(lang === 'es') embed.title = `Perks Fijas:`;
-                if(lang === 'en') embed.title = `Signature Perks:`
+                if(item_searched.traitIds.includes("item_type.armor")) {
+                  if(lang === 'es') embed.title = `Perk Fija:`;
+                  if(lang === 'en') embed.title = `Signature Perk:`
+                }
+
+                if(item_searched.traitIds.includes("item_type.weapon")) {
+                  if(lang === 'es') embed.title = `Perks Fijas:`;
+                  if(lang === 'en') embed.title = `Signature Perks:`
+                }
               } else {
                 if(lang === 'es') embed.title = `Drop Especial de Bungie (Siempre igual):`;
                 if(lang === 'en') embed.title = `Bungie's Curated Roll (Always the same):`
