@@ -83,17 +83,7 @@ const controller = {
           // Item stats
           var stats_list = [];
 
-          for (let stat in stats) {
-            for (let item_stat in item_searched.stats.stats) {
-              if (
-                stats[stat].hash === item_searched.stats.stats[item_stat].statHash
-              ) {
-                if (stats[stat].displayProperties.name && item_searched.stats.stats[item_stat].value && item_searched.stats.stats[item_stat].value !== 0){
-                  stats_list.push(`${stats[stat].displayProperties.name}: ${item_searched.stats.stats[item_stat].value} \n`);
-                }
-              }
-            }
-          }
+          this.itemStats(item_searched, stats, stats_list);
           // End item stats
 
           // First message, with most of the info (except random perks)
@@ -156,13 +146,7 @@ const controller = {
               
               var plug_perk_hash = plugs[socket_entries[socket].randomizedPlugSetHash];
   
-              if(plug_perk_hash){
-                for(let plug_perk_item in plug_perk_hash.reusablePlugItems){
-                  var random_perk_hash = plug_perk_hash.reusablePlugItems[plug_perk_item].plugItemHash;
-  
-                  random_perks_list.push(`\n**${items[random_perk_hash].displayProperties.name}**:\n${items[random_perk_hash].displayProperties.description} \n`);
-                }
-              }
+              this.getRandomPerks(items, plug_perk_hash, random_perks_list);
               
               // Next messages, one per group of perks
               if(random_perks_list.length !== 0) {
@@ -180,14 +164,13 @@ const controller = {
               cnt++;
 
               // Curated Rolls
-              if(socket_entries[socket].singleInitialItemHash !== 0){
-                var socket_hash = socket_entries[socket].singleInitialItemHash;
-                curated_roll_list.push(`\n**${items[socket_hash].displayProperties.name}**:\n${items[socket_hash].displayProperties.description} \n`);
-              }              
+             this.getCuratedRoll(items, curated_roll_list, socket_entries, socket);
             }
 
+            // Deleting last 3 entries, which are not perks
             for(let i = 0; i < 3; i++) curated_roll_list.pop();
 
+            //Last message for curated roll
             if(curated_roll_list.length !== 0) {
               embed.author = null;
               if(item_searched.inventory.tierTypeName === 'Excepcional'){
@@ -210,6 +193,37 @@ const controller = {
     // End
     console.log("Finish!");
   },
+
+  itemStats(item, stats, list){
+    for (let stat in stats) {
+      for (let item_stat in item.stats.stats) {
+        if (
+          stats[stat].hash === item.stats.stats[item_stat].statHash
+        ) {
+          if (stats[stat].displayProperties.name && item.stats.stats[item_stat].value && item.stats.stats[item_stat].value !== 0){
+            list.push(`${stats[stat].displayProperties.name}: ${item.stats.stats[item_stat].value} \n`);
+          }
+        }
+      }
+    }
+  },
+
+  getRandomPerks(items, hash, list){
+    if(hash){
+      for(let item in hash.reusablePlugItems){
+        var random_perk_hash = hash.reusablePlugItems[item].plugItemHash;
+
+        list.push(`\n**${items[random_perk_hash].displayProperties.name}**:\n${items[random_perk_hash].displayProperties.description} \n`);
+      }
+    }
+  },
+
+  getCuratedRoll(items, list, socket_entries, socket){
+    if(socket_entries[socket].singleInitialItemHash !== 0){
+      var socket_hash = socket_entries[socket].singleInitialItemHash;
+      list.push(`\n**${items[socket_hash].displayProperties.name}**:\n${items[socket_hash].displayProperties.description} \n`);
+    } 
+  }
 };
 
 // Export controller to use it in index.js
