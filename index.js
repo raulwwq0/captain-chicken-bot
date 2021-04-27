@@ -87,7 +87,7 @@ client.on("message", async (message) => {
     TTSController.TTS(client, message, args);
   }
 
-  // Destiny ----------------------------------------------------------------------------------------------------------------
+  // Destiny 2 item info----------------------------------------------------------------------------------------------------------------
   if (command === "destiny" || command === "destiny-es") {
     var lang = "es";
     DestinyController.getInfo(message, args, lang);
@@ -97,28 +97,6 @@ client.on("message", async (message) => {
     var lang = "en";
     DestinyController.getInfo(message, args, lang);
   }
-
-  /* 
-  Crackwatch will be closed for a  few months, so their API doesn't work till then
-
-  // Search a game in CrackWatch ----------------------------------------------------------------
-  if (command === "cw") {
-    // If there are no args when crackwatch command is called, send a message
-    if (!args.length)
-      return message.reply(
-        'como se nota que tu número de cromosomas no es el adecuado: Tienes que indicar el juego que quieres buscar después de " }cw "'
-      );
-
-    // Use the controller method "getSlugFromArgs"
-    const search = CrackWatchController.getSlugFromArgs(message, args);
-
-    // Use the controller method "getGame"
-    CrackWatchController.getGame(message, search).then((answer) =>
-      message.channel.send(answer)
-    );
-    
-  }
-  */
 });
 
 client.login(token);
