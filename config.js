@@ -9,4 +9,5 @@ module.exports = {
     crackwatch_api: "https://api.crackwatch.com/api/games",
     bungie_api: "https://www.bungie.net",
     bungie_api_key: process.env.BUNGIE_API_KEY,
+    mongoPath: process.env.MONGO_PATH
 };

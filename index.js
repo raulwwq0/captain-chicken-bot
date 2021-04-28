@@ -2,11 +2,13 @@
 
 // Load modules, confings and controllers
 const Discord = require("discord.js");
+var CronJob = require("cron").CronJob;
 const { token, prefix } = require("./config");
 const HelpController = require("./controllers/help");
 const MusicController = require("./controllers/music");
 const TTSController = require("./controllers/tts");
 const DestinyController = require("./controllers/destiny");
+const ServerController = require("./controllers/server-settings");
 
 // Create the client and add the prefix to call the bot
 const client = new Discord.Client();
@@ -15,17 +17,30 @@ const client = new Discord.Client();
 
 var player = MusicController.createPlayer(client);
 
-var channel_id = null;
-var bot_channel = client.channels.cache.get(channel_id);
+var channel_id = 0;
+var send_auth = true;
 
-client.on('ready', () => {
+client.on('ready', async () => {
   // Console log when bot is ready
   console.log("Bot ready");
+
+  channel_id = await ServerController.getXurChannel(client);
+
+  var bot_channel = client.channels.cache.get(channel_id);
   let message = {
     channel: bot_channel
   };
 
-  //DestinyController.xurArrivesChecker(message);
+  var job = new CronJob(
+    "* * * * * *",
+    async function () {
+      send_auth = await DestinyController.xurArrivesChecker(message, send_auth)
+    },
+    null,
+    true,
+    "Europe/Berlin"
+  );
+  job.start();
 });
 
 // Catch message and handle a response
@@ -55,9 +70,12 @@ client.on("message", async (message) => {
   if (command === "set-channel") {
     var channel_name = args.join(" ");
     var channel = client.channels.cache.find(channel => channel.name === channel_name);
-    channel_id = channel.id;
-    channel.send("Cualquier aviso lo daré por este canal");
-    console.log(message.guild.name);
+
+    ServerController.setXurChannel(message, channel);
+    setTimeout(async () => {
+      channel_id = await ServerController.getXurChannel(client);
+      send_auth = true;
+    }, 1000)
   }
 
   // Music -----------------------------------------------------------------------------------

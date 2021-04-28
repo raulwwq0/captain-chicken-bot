@@ -4,7 +4,6 @@
 const fetch = require("node-fetch");
 const { bungie_api, bungie_api_key } = require("../config");
 const embed = require("../models/destiny");
-var CronJob = require("cron").CronJob;
 
 // Set the controller
 const controller = {
@@ -314,8 +313,8 @@ const controller = {
   
     console.log("Finding Xur...")
     var updated_json = await fetch(
-      //`https://paracausal.science/xur/current.json`
-      `https://api.npoint.io/7bcfced1b9fdabf2e262` //test
+      `https://paracausal.science/xur/current.json`
+      //`https://api.npoint.io/7bcfced1b9fdabf2e262` //test
     );
 
     var locations_json = await fetch(
@@ -448,36 +447,28 @@ const controller = {
     console.log("Finish!");
   },
 
-  xurArrivesChecker(message) {
-    var can_send = true;
+  async xurArrivesChecker(message, send_auth) {
 
-    var job = new CronJob(
-      "* * * * * *",
-      async function () {
-        if(message.channel !== null || message.channel !== undefined){
-          var updated_json = await fetch(
-            //`https://paracausal.science/xur/current.json`
-            `https://api.npoint.io/7bcfced1b9fdabf2e262` //test
-          );
-  
-          var updated_info = await updated_json.json();
-  
-          if (updated_info !== null && can_send) {
-            console.log("Xûr Arrives!!!");
-            can_send = false;
-            module.exports.Xur(message);
-          }
-          if (updated_info === null && !can_send) {
-            console.log("Xûr Leaves...");
-            can_send = true;
-          }
-        }
-      },
-      null,
-      true,
-      "Europe/Berlin"
-    );
-    job.start();
+    if(message.channel !== null || message.channel !== undefined){
+      var updated_json = await fetch(
+        `https://paracausal.science/xur/current.json`
+        //`https://api.npoint.io/7bcfced1b9fdabf2e262` //test
+      );
+
+      var updated_info = await updated_json.json();
+
+      if (updated_info !== null && send_auth) {
+        console.log("Xûr Arrives!!!");
+        send_auth = false;
+        module.exports.Xur(message);
+      }
+      if (updated_info === null && !send_auth) {
+        console.log("Xûr Leaves...");
+        send_auth = true;
+      }
+    }
+
+    return send_auth;
   },
 };
 
