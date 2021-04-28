@@ -47,6 +47,8 @@ const controller = {
 
     \` }xur \` \nMuestra la ubicación de Xûr y los objetos que trae
 
+    \` }set-channel "Nombre de un canal de texto" \` \nSelecciona un canal para que Captain Chicken te mande un mensaje avisándote cuando llega Xûr y lo que tiene para ti
+
     `;
     help.fields[3].name = "Otros";
     help.fields[3].value = `
