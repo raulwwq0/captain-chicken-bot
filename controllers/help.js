@@ -17,27 +17,42 @@ const controller = {
 
     help.fields[0].name = "Música";
     help.fields[0].value =`
-    \` }play + "URL o nombre de la canción" \` El bot entra en el canal de voz donde se encuentra el usuario que ejecuta el comando y reproduce la canción. Soporta enlaces de YouTube, Spotify e incluso busqueda por nombre de la canción
-    \` }playlist + "URL o nombre de la playlist" \` Igual que }play pero con una lista de canciones
-    \` }pause \` Pausa la canción actual para continuarla más tarde
-    \` }continue \` Continua la canción por donde se pausó
-    \` }skip \` Salta la canción actual y reproduce la siguiente (si es que hay...)
-    \` }stop \` Para la música y se desconecta del canal de voz
-    \` }song \` Muestra el nombre de la canción que está sonando
-    \` }progress \` Muestra una pequeña barra de progreso y el tiempo que lleva sonando la canción
+    \` }play "URL o nombre de la canción" \` \nEl bot entra en el canal de voz donde se encuentra el usuario que ejecuta el comando y reproduce la canción. Soporta enlaces de YouTube, Spotify e incluso busqueda por nombre de la canción
+    
+    \` }playlist "URL o nombre de la playlist" \` \nIgual que }play pero con una lista de canciones
+    
+    \` }pause \` \nPausa la canción actual para continuarla más tarde
+    
+    \` }continue \` \nContinua la canción por donde se pausó
+    
+    \` }skip \` \nSalta la canción actual y reproduce la siguiente (si es que hay...)
+    
+    \` }stop \` \nPara la música y se desconecta del canal de voz
+    
+    \` }song \` \nMuestra el nombre de la canción que está sonando
+    
+    \` }progress \` \nMuestra una pequeña barra de progreso y el tiempo que lleva sonando la canción
+
     `;
     help.fields[1].name = "Text To Speech";
     help.fields[1].value = `
-    \` }tts \` Captain Chicken dirá lo que escribas después de este comando
+    \` }tts \` \nCaptain Chicken dirá lo que escribas después de este comando
+
     `;
     help.fields[2].name = "Destiny 2";
     help.fields[2].value = `
-    \` }destiny + "Nombre del item (arma o armadura)" \` Captain Chicken mostrará todo lo relacionado con el arma y armadura que quieres buscar. Por defecto busca en español, si quieres usar la búsqueda de items en inglés debes poner -en detras del comando (ej: }destiny-en para inglés, }destiny o }destiny-es para español)
+    \` }destiny "Nombre del item (arma o armadura)" \` \nCaptain Chicken mostrará todo lo relacionado con el arma y armadura que quieres buscar. 
+    
+    Por defecto busca en español, si quieres usar la búsqueda de items en inglés debes poner -en detras del comando (ej: }destiny-en para inglés, }destiny o }destiny-es para español)
+
+    \` }xur \` \nMuestra la ubicación de Xûr y los objetos que trae
+
     `;
     help.fields[3].name = "Otros";
     help.fields[3].value = `
-    \` }help \` Muestra todos los comandos disponibles
-    \` }ping \` Muestra la latencia que tiene el bot respecto al servidor
+    \` }help \` \nMuestra todos los comandos disponibles
+    
+    \` }ping \` \nMuestra la latencia que tiene el bot respecto al servidor
     `;
     
 

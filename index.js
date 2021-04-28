@@ -1,8 +1,5 @@
 "use strict";
 
-// Console log when bot is ready
-console.log("Bot ready");
-
 // Load modules, confings and controllers
 const Discord = require("discord.js");
 const { token, prefix } = require("./config");
@@ -17,6 +14,19 @@ const client = new Discord.Client();
 // Create the music player
 
 var player = MusicController.createPlayer(client);
+
+var channel_id = null;
+var bot_channel = client.channels.cache.get(channel_id);
+
+client.on('ready', () => {
+  // Console log when bot is ready
+  console.log("Bot ready");
+  let message = {
+    channel: bot_channel
+  };
+
+  //DestinyController.xurArrivesChecker(message);
+});
 
 // Catch message and handle a response
 client.on("message", async (message) => {
@@ -39,6 +49,15 @@ client.on("message", async (message) => {
   if (command === "ping") {
     const timeTaken = Date.now() - message.createdTimestamp;
     message.reply(`¡Pong! La latencia con el servidor es de ${timeTaken}ms.`);
+  }
+
+  // Set Channel --------------------------------------------------------------------------------
+  if (command === "set-channel") {
+    var channel_name = args.join(" ");
+    var channel = client.channels.cache.find(channel => channel.name === channel_name);
+    channel_id = channel.id;
+    channel.send("Cualquier aviso lo daré por este canal");
+    console.log(message.guild.name);
   }
 
   // Music -----------------------------------------------------------------------------------
@@ -95,6 +114,10 @@ client.on("message", async (message) => {
   if (command === "destiny-en") {
     var lang = "en";
     DestinyController.getInfo(message, args, lang);
+  }
+
+  if (command === "xur") {
+    DestinyController.Xur(message);
   }
 });
 
