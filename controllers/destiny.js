@@ -14,7 +14,7 @@ const controller = {
 
     // Petitions to the bungie api
     var items_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyInventoryItemDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyInventoryItemDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -23,7 +23,7 @@ const controller = {
     );
 
     var stats_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyStatDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyStatDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -32,7 +32,7 @@ const controller = {
     );
 
     var plugs_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyPlugSetDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyPlugSetDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -318,7 +318,7 @@ const controller = {
     );
 
     var locations_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyDestinationDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json
+      `${bungie_api}/common/destiny2_content/json/es/DestinyDestinationDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json
     `,
       {
         headers: {
@@ -328,7 +328,7 @@ const controller = {
     );
 
     var vendors_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyVendorDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json
+      `${bungie_api}/common/destiny2_content/json/es/DestinyVendorDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json
     `,
       {
         headers: {
@@ -348,7 +348,7 @@ const controller = {
     );
 
     var items_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyInventoryItemDefinition-a1065791-e29c-4e23-9dc7-d88310a12936.json`,
+      `${bungie_api}/common/destiny2_content/json/es/DestinyInventoryItemDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
