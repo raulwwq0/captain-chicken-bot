@@ -17,24 +17,36 @@ const client = new Discord.Client();
 
 var player = MusicController.createPlayer(client);
 
-var channel_id = 0;
-var send_auth = true;
+var channels_cache = [];
+var channels_with_current_message = [];
+var json_file_name = '';
 
 client.on('ready', async () => {
   // Console log when bot is ready
   console.log("Bot ready");
 
-  channel_id = await ServerController.getXurChannel(client);
-
-  var bot_channel = client.channels.cache.get(channel_id);
-  let message = {
-    channel: bot_channel
-  };
+  setInterval(async () => {
+    json_file_name = await ServerController.getJsonFileNameFromManifest();
+    channels_cache = await ServerController.getXurChannel(client);
+  }, 10000);
 
   var job = new CronJob(
-    "* * * * * *",
+    "* * * * * 2,5",
     async function () {
-      send_auth = await DestinyController.xurArrivesChecker(message, send_auth)
+      for(let channel_id in channels_cache){
+        var xur_arrives = await DestinyController.xurArrivesChecker();
+
+        if(channels_with_current_message.includes(channels_cache[channel_id]) === false) {
+          var bot_channel = client.channels.cache.get(channels_cache[channel_id]);
+          let message = {
+            channel: bot_channel
+          };
+          if(xur_arrives === true) DestinyController.Xur(message, json_file_name);
+        };
+        if(xur_arrives === true && channels_with_current_message.includes(channels_cache[channel_id]) === false) channels_with_current_message.push(channels_cache[channel_id]);
+        if(xur_arrives === false) channels_with_current_message = [];
+        if(xur_arrives === undefined) continue;
+      }
     },
     null,
     true,
@@ -73,8 +85,8 @@ client.on("message", async (message) => {
 
     ServerController.setXurChannel(message, channel);
     setTimeout(async () => {
+      json_file_name = await ServerController.getJsonFileNameFromManifest();
       channel_id = await ServerController.getXurChannel(client);
-      send_auth = true;
     }, 1000)
   }
 
@@ -126,16 +138,16 @@ client.on("message", async (message) => {
   // Destiny 2 item info----------------------------------------------------------------------------------------------------------------
   if (command === "destiny" || command === "destiny-es") {
     var lang = "es";
-    DestinyController.getInfo(message, args, lang);
+    DestinyController.getInfo(message, args, lang, json_file_name);
   }
 
   if (command === "destiny-en") {
     var lang = "en";
-    DestinyController.getInfo(message, args, lang);
+    DestinyController.getInfo(message, args, lang, json_file_name);
   }
 
   if (command === "xur") {
-    DestinyController.Xur(message);
+    DestinyController.Xur(message, json_file_name);
   }
 });
 

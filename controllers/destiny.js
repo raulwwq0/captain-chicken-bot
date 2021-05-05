@@ -7,14 +7,14 @@ const embed = require("../models/destiny");
 
 // Set the controller
 const controller = {
-  async getInfo(message, args, lang) {
+  async getInfo(message, args, lang, json_file_name) {
     var search = args.join(" ");
     var got_it = false;
     console.log(`Searching: ${search}`);
 
     // Petitions to the bungie api
     var items_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyInventoryItemDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyInventoryItemDefinition-${json_file_name}`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -23,7 +23,7 @@ const controller = {
     );
 
     var stats_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyStatDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyStatDefinition-${json_file_name}`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -32,7 +32,7 @@ const controller = {
     );
 
     var plugs_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyPlugSetDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
+      `${bungie_api}/common/destiny2_content/json/${lang}/DestinyPlugSetDefinition-${json_file_name}`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -51,11 +51,11 @@ const controller = {
       if (
         item_searched.displayProperties.name.toLowerCase() ===
           search.toLowerCase() &&
-        item_searched.traitIds
+        item_searched.equippingBlock.uniqueLabel
       ) {
         if (
-          item_searched.traitIds.includes("item_type.weapon") ||
-          item_searched.traitIds.includes("item_type.armor")
+          item_searched.equippingBlock.uniqueLabel.includes("weapon") ||
+          item_searched.equippingBlock.uniqueLabel.includes("armor")
         ) {
           // Filters to avoid unuseful messages
 
@@ -70,7 +70,7 @@ const controller = {
 
           // Filter for armor with Version 1 stats
           var version_1_filter = false;
-          if (item_searched.traitIds.includes("item_type.armor")) {
+          if (item_searched.equippingBlock.uniqueLabel.includes("armor")) {
             for (let investmentStat in item_searched.investmentStats) {
               if (
                 item_searched.investmentStats[investmentStat].value === 10 ||
@@ -100,7 +100,7 @@ const controller = {
           embed.image.url = `${bungie_api}${item_searched.screenshot}`;
           embed.footer.text = `HASH: ${item_searched.hash}`;
 
-          if (item_searched.traitIds.includes("item_type.weapon")) {
+          if (item_searched.equippingBlock.uniqueLabel.includes("weapon")) {
             if (lang === "es") {
               embed.description = `*${item_searched.flavorText}*
           
@@ -124,7 +124,7 @@ const controller = {
             }
           }
 
-          if (item_searched.traitIds.includes("item_type.armor")) {
+          if (item_searched.equippingBlock.uniqueLabel.includes("armor")) {
             if (lang === "es") {
               embed.description = `*${item_searched.flavorText}*
           
@@ -171,8 +171,8 @@ const controller = {
 
           // Getting random perks of the item if it is possible
           if (
-            item_searched.traitIds.includes("item_type.weapon") ||
-            (item_searched.traitIds.includes("item_type.armor") &&
+            item_searched.equippingBlock.uniqueLabel.includes("weapon") ||
+            (item_searched.equippingBlock.uniqueLabel.includes("armor") &&
               item_searched.inventory.tierTypeName === "Excepcional") ||
             item_searched.inventory.tierTypeName === "Exotic"
           ) {
@@ -186,7 +186,7 @@ const controller = {
               var plug_perk_hash =
                 plugs[socket_entries[socket].randomizedPlugSetHash];
 
-              if (item_searched.traitIds.includes("item_type.weapon"))
+              if (item_searched.equippingBlock.uniqueLabel.includes("weapon"))
                 this.getRandomPerks(items, plug_perk_hash, random_perks_list);
 
               // Next messages, one per group of perks
@@ -218,9 +218,9 @@ const controller = {
 
             // Deleting last 3 entries, which are not perks
 
-            if (item_searched.traitIds.includes("item_type.weapon"))
+            if (item_searched.equippingBlock.uniqueLabel.includes("weapon"))
               for (let i = 0; i < 3; i++) curated_roll_list.pop();
-            if (item_searched.traitIds.includes("item_type.armor")) {
+            if (item_searched.equippingBlock.uniqueLabel.includes("armor")) {
               var special_armor_perk = curated_roll_list.pop();
               curated_roll_list = [special_armor_perk];
             }
@@ -232,12 +232,12 @@ const controller = {
                 item_searched.inventory.tierTypeName === "Excepcional" ||
                 item_searched.inventory.tierTypeName === "Exotic"
               ) {
-                if (item_searched.traitIds.includes("item_type.armor")) {
+                if (item_searched.equippingBlock.uniqueLabel.includes("armor")) {
                   if (lang === "es") embed.title = `Perk Fija:`;
                   if (lang === "en") embed.title = `Signature Perk:`;
                 }
 
-                if (item_searched.traitIds.includes("item_type.weapon")) {
+                if (item_searched.equippingBlock.uniqueLabel.includes("weapon")) {
                   if (lang === "es") embed.title = `Perks Fijas:`;
                   if (lang === "en") embed.title = `Signature Perks:`;
                 }
@@ -309,7 +309,7 @@ const controller = {
     }
   },
 
-  async Xur(message) {
+  async Xur(message, json_file_name) {
   
     console.log("Finding Xur...")
     var updated_json = await fetch(
@@ -318,7 +318,7 @@ const controller = {
     );
 
     var locations_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyDestinationDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json
+      `${bungie_api}/common/destiny2_content/json/es/DestinyDestinationDefinition-${json_file_name}
     `,
       {
         headers: {
@@ -328,7 +328,7 @@ const controller = {
     );
 
     var vendors_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyVendorDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json
+      `${bungie_api}/common/destiny2_content/json/es/DestinyVendorDefinition-${json_file_name}
     `,
       {
         headers: {
@@ -348,7 +348,7 @@ const controller = {
     );
 
     var items_json = await fetch(
-      `${bungie_api}/common/destiny2_content/json/es/DestinyInventoryItemDefinition-75924f13-d902-45e8-8443-d6937b8dfdd4.json`,
+      `${bungie_api}/common/destiny2_content/json/es/DestinyInventoryItemDefinition-${json_file_name}`,
       {
         headers: {
           "X-API-Key": bungie_api_key,
@@ -447,28 +447,24 @@ const controller = {
     console.log("Finish!");
   },
 
-  async xurArrivesChecker(message, send_auth) {
+  async xurArrivesChecker() {
 
-    if(message.channel !== null || message.channel !== undefined){
-      var updated_json = await fetch(
-        `https://paracausal.science/xur/current.json`
-        //`https://api.npoint.io/7bcfced1b9fdabf2e262` //test
-      );
+    var updated_json = await fetch(
+      `https://paracausal.science/xur/current.json`
+      //`https://api.npoint.io/7bcfced1b9fdabf2e262` //test
+    );
 
-      var updated_info = await updated_json.json();
+    var updated_info = await updated_json.json();
 
-      if (updated_info !== null && send_auth) {
-        console.log("Xûr Arrives!!!");
-        send_auth = false;
-        module.exports.Xur(message);
-      }
-      if (updated_info === null && !send_auth) {
-        console.log("Xûr Leaves...");
-        send_auth = true;
-      }
+    if (updated_info !== null) {
+      console.log("Xûr is here!!!");
+      return true;
     }
-
-    return send_auth;
+    if (updated_info === null) {
+      console.log("Xûr is not here...");
+      return false;
+    }
+    
   },
 };
 
