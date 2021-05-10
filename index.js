@@ -31,7 +31,7 @@ client.on('ready', async () => {
   }, 10000);
 
   var job = new CronJob(
-    "* * * * * 0,1,2,5,6",
+    "* * * * * 2,5",
     async function () {
       for(let channel_id in channels_cache){
         var xur_arrives = await DestinyController.xurArrivesChecker();
