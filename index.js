@@ -31,7 +31,7 @@ client.on('ready', async () => {
   }, 10000);
 
   var job = new CronJob(
-    "* * * * * 5",
+    "1 * * * * 5", // Execute the first second of every minute on Fridays
     async function () {
       for(let channel_id in channels_cache){
         var xur_arrives = await DestinyController.xurArrivesChecker();
