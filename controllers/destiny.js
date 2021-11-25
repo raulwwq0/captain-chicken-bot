@@ -1,7 +1,7 @@
 "use strict";
 
 // Load modules, configs and models
-const fetch = require("node-fetch");
+import fetch from 'node-fetch';
 const { bungie_api, bungie_api_key } = require("../config");
 const embed = require("../models/destiny");
 
