@@ -10,7 +10,7 @@
   "author": "Raúl Aguilar García",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/opus": "^0.6.0",
+    "@discordjs/opus": "^0.7.0",
     "@mapbox/node-pre-gyp": "^1.0.6",
     "cron": "^1.8.2",
     "discord-music-player": "^8.2.0",
