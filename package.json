@@ -20,7 +20,7 @@
     "ffmpeg-static": "^4.4.0",
     "fluent-ffmpeg": "^2.1.2",
     "google-tts-api": "^2.0.2",
-    "mongoose": "^6.0.12",
+    "mongoose": "^6.0.13",
     "node-fetch": "^3.0.0",
     "nodemon": "^2.0.15",
     "querystring": "^0.2.1"
