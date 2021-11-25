@@ -22,4 +22,4 @@ const helpEmbed = {
   ],
 };
 
-module.exports = helpEmbed;
+export default helpEmbed;

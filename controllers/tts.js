@@ -1,7 +1,7 @@
 "use strict";
 
 // Load the tts module
-const googleTTS = require("google-tts-api");
+import googleTTS from "google-tts-api";
 
 // Create the controller
 const controller = {
@@ -35,4 +35,4 @@ const controller = {
 };
 
 // Export the controller
-module.exports = controller;
+export default controller;

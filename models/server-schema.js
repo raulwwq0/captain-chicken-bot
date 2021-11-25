@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
 const reqString = {
   type: String,
@@ -12,4 +12,4 @@ const serverSchema = mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('server-channels', serverSchema)
+export default mongoose.model('server-channels', serverSchema)

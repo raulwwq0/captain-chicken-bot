@@ -1,7 +1,7 @@
-const fetch = require("node-fetch");
-const { bungie_api, bungie_api_key } = require("../config");
-const mongo = require("../mongo");
-const serverSchema = require("../models/server-schema");
+import fetch from "node-fetch";
+import { bungie_api, bungie_api_key } from "../config.js";
+import mongo from "../mongo.js";
+import serverSchema from "../models/server-schema.js";
 
 const controller = {
   async getJsonFileNameFromManifest(){
@@ -74,4 +74,4 @@ const controller = {
 };
 
 // Export controller to use it in index.js
-module.exports = controller;
+export default controller;

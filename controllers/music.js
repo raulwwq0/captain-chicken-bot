@@ -1,6 +1,6 @@
 "use strict";
 
-const { Player } = require("discord-music-player");
+import { Player } from "discord-music-player";
 
 const controller = {
 
@@ -109,4 +109,4 @@ const controller = {
 };
 
 // Export the controller
-module.exports = controller;
+export default controller;

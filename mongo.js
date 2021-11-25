@@ -1,11 +1,10 @@
-const mongoose = require('mongoose')
-const { mongoPath } = require('./config.js')
+import mongoose from 'mongoose';
+import { mongoPath } from './config.js';
 
-module.exports = async () => {
+export default async () => {
   await mongoose.connect(mongoPath, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
+    useUnifiedTopology: true
   })
   return mongoose
 }

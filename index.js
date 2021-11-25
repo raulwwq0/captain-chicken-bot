@@ -1,18 +1,18 @@
 "use strict";
 
 // Load modules, confings and controllers
-const Discord = require("discord.js");
-var CronJob = require("cron").CronJob;
-const { token, prefix } = require("./config");
-const HelpController = require("./controllers/help");
-const MusicController = require("./controllers/music");
-const TTSController = require("./controllers/tts");
-const DestinyController = require("./controllers/destiny");
-const ServerController = require("./controllers/server-settings");
+import { Client, Intents } from "discord.js";
+import { CronJob } from "cron";
+import { token, prefix }  from "./config.js";
+import HelpController from "./controllers/help.js";
+import MusicController from "./controllers/music.js";
+import TTSController from "./controllers/tts.js";
+import DestinyController from "./controllers/destiny.js";
+import ServerController from "./controllers/server-settings.js";
 
 // Create the client and add the prefix to call the bot
-const client = new Discord.Client();
-
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+console.log(token);
 // Create the music player
 
 var player = MusicController.createPlayer(client);

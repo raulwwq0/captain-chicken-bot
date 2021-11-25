@@ -2,8 +2,8 @@
 
 // Load modules, configs and models
 import fetch from "node-fetch";
-const { bungie_api, bungie_api_key } = require("../config");
-const embed = require("../models/destiny");
+import { bungie_api, bungie_api_key } from "../config.js";
+import embed from "../models/destiny.js";
 
 // Set the controller
 const controller = {
@@ -469,4 +469,4 @@ const controller = {
 };
 
 // Export controller to use it in index.js
-module.exports = controller;
+export default controller;

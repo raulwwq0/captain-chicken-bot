@@ -22,4 +22,4 @@ const embedMessage = {
     }
 }
 
-module.exports = embedMessage;
+export default embedMessage;

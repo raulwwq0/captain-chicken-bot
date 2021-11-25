@@ -1,7 +1,7 @@
 "use strict";
 
 // Load the help model
-const help = require("../models/help");
+import help from "../models/help.js";
 
 const controller = {
   // Fill the help model with useful information about commands
@@ -62,4 +62,4 @@ const controller = {
   },
 };
 
-module.exports = controller;
+export default controller;
