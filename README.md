@@ -1,3 +1,5 @@
+# Currently it's not working due to the arrival of DiscordJS v13... Working on it!
+
 # captain-chicken-bot
 
 ## (I haven't translate the bot yet...)
