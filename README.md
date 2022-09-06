@@ -1,5 +1,7 @@
 # captain-chicken-bot
 
+# OUTDATED: Due to Discord JS v12 seems to not work anymore this version of the bot is useless. It can start but it can't listen to any command. Working on an update
+
 ## (I haven't translate the bot yet...)
 
 Esta es la lista de todos los comandos:
